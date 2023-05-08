@@ -18,7 +18,11 @@ Compare Spring Boot, Ktor and Reactive Spring Boot performance.
 | Ktor           | 100         | 18.88              | 5297.431              | 52.974                                             |
 
 
-Test are done using Apache AB tool like this:
-ab -n 4000 -c 100 http://localhost:8082/reactive/data/1
-ab -n 4000 -c 100 http://localhost:8081/boot/data/1
-ab -n 4000 -c 100 http://localhost:8084/ktor/data/1
+Test were run using Apache AB tool like this:
+
+```ab -n 4000 -c 100 http://localhost:8082/reactive/data/1```
+
+```ab -n 4000 -c 100 http://localhost:8081/boot/data/1```
+
+```ab -n 4000 -c 100 http://localhost:8084/ktor/data/1```
+
