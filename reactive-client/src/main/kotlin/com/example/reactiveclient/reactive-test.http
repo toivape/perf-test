@@ -2,13 +2,17 @@
 GET http://localhost:8082/reactive/data/1
 
 ### Call delay endpoint at legacy backend
-GET http://localhost:8082/reactive/delay/8000
+GET http://localhost:8082/reactive/delay/2000
 Accept: application/json
 
 ### Call delay endpoint at legacy backend. This will take too long and break the circuit.
-GET http://localhost:8082/reactive/delay/22000
+GET http://localhost:8082/reactive/delay/10000
 Accept: application/json
 
-### Delay 666 results in BadRequest
-GET http://localhost:8082/reactive/delay/666
+### Call delay endpoint with delay of 400ms to return bad request
+GET http://localhost:8082/reactive/delay/400
+Accept: application/json
+
+### Call delay endpoint with delay of 400ms to return not found
+GET http://localhost:8082/reactive/delay/404
 Accept: application/json

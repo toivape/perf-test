@@ -1,6 +1,7 @@
 package com.example.legacybackend
 
 import mu.KotlinLogging
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,15 +24,26 @@ class LegacyController(val legacyService: LegacyService) {
     }
 
     @PostMapping("/delay")
-    fun delay(@RequestBody delay: Delay): ResponseEntity<Delay> {
-        if (delay.delayMs == 666L) {
-            log.info { "Delay is set to ${delay.delayMs}ms. Returning bad request." }
-            return ResponseEntity.badRequest().build()
+    fun delay(@RequestBody delay: Delay) =
+        when (delay.delayMs) {
+            400L -> ResponseEntity.badRequest().build()
+            404L -> ResponseEntity.notFound().build()
+            else -> {
+                log.info { ">>>>> Delaying for ${delay.delayMs} ms" }
+                Thread.sleep(delay.delayMs)
+                log.info { "<<<<< Done delaying for ${delay.delayMs} ms" }
+                ResponseEntity.ok(delay)
+            }
         }
-        log.info { ">>>>> Delaying for ${delay.delayMs} ms" }
-        Thread.sleep(delay.delayMs)
-        log.info { "<<<<< Done delaying for ${delay.delayMs} ms" }
-        return ResponseEntity.ok(delay)
+
+    @GetMapping("/legacy/not-found")
+    fun getNotFound(): ResponseEntity<String> {
+        return ResponseEntity.notFound().build()
+    }
+
+    @GetMapping("/legacy/bad-request")
+    fun getBadRequest(): ResponseEntity<String> {
+        return ResponseEntity.badRequest().build()
     }
 }
 

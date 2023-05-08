@@ -1,11 +1,29 @@
 
 ### Call delay endpoint at legacy backend
-GET http://localhost:8081/boot/delay/1000
+GET http://localhost:8081/boot/delay/2000
 Accept: application/json
 
 ### Call delay endpoint at legacy backend. This will take too long and break the circuit.
-GET http://localhost:8081/boot/delay/22000
+GET http://localhost:8081/boot/delay/10000
 Accept: application/json
+
+### Call delay endpoint with delay of 400ms to return bad request
+GET http://localhost:8081/boot/delay/400
+Accept: application/json
+
+### Call delay endpoint with delay of 400ms to return not found
+GET http://localhost:8081/boot/delay/404
+Accept: application/json
+
+### Call endpoint returning bad request
+GET http://localhost:8081/boot/bad-request
+Accept: application/json
+
+### Call endpoint returning not found
+GET http://localhost:8081/boot/not-found
+Accept: application/json
+
+
 
 ### Get data by id from legacy backend. Request is delayed by 5 seconds in legacy backend.
 GET http://localhost:8081/boot/data/1

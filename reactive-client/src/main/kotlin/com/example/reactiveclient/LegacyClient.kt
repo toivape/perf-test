@@ -25,6 +25,10 @@ class LegacyClient(private val legacyWebClient: WebClient, private val reactiveC
             .uri("/api/delay")
             .body(Mono.just(delay), Delay::class.java)
             .retrieve()
+            .onStatus({ it.isSameCodeAs(HttpStatus.NOT_FOUND) }) {
+                log.error { "Request $delay failed with 404 error code" }
+                Mono.error(NotFoundException("Request $delay not found: ${it.statusCode()}"))
+            }
             .onStatus({ it.is4xxClientError }) { resp ->
                 log.error { "Request $delay failed with 4XX error code: ${resp.statusCode()}" }
                 Mono.error(BadRequestException("Request $delay failed with error: ${resp.statusCode()}"))
@@ -35,13 +39,6 @@ class LegacyClient(private val legacyWebClient: WebClient, private val reactiveC
             }
             .bodyToMono(Delay::class.java)
         // .timeout(java.time.Duration.ofSeconds(7)) // This timeout value comes from the Mono publisher class. Nothing to do with http.
-            /*.transform {
-                val rcb = reactiveCircuitBreakerFactory.create("customer-service")
-                rcb.run(it) { t ->
-                    log.error(t) { "LegacyClient Transform fallback: Error occurred while calling legacy service: ${t.message}" }
-                    Mono.just(Delay(-1))
-                }
-            }*/
     }
 }
 
@@ -52,3 +49,6 @@ class IntegrationException(msg: String) : Exception(msg)
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 class BadRequestException(msg: String) : Exception(msg)
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+class NotFoundException(msg: String) : Exception(msg)
