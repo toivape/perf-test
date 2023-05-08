@@ -1,0 +1,12 @@
+
+### Call delay endpoint at legacy backend
+GET http://localhost:8081/boot/delay/1000
+Accept: application/json
+
+### Call delay endpoint at legacy backend. This will take too long and break the circuit.
+GET http://localhost:8081/boot/delay/22000
+Accept: application/json
+
+### Get data by id from legacy backend. Request is delayed by 5 seconds in legacy backend.
+GET http://localhost:8081/boot/data/1
+

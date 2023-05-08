@@ -1,0 +1,8 @@
+### Say hello to the world
+GET http://localhost:8083/ktor/hello
+Accept: application/json
+
+### Get data by id from legacy backend. Request is delayed by 5 seconds in legacy backend.
+GET http://localhost:8083/ktor/data/1
+Accept: application/json
+
