@@ -9,10 +9,14 @@ Accept: application/json
 GET http://localhost:8082/reactive/delay/10000
 Accept: application/json
 
-### Call delay endpoint with delay of 400ms to return bad request
+### Call delay endpoint with delay of 400 to return bad request
 GET http://localhost:8082/reactive/delay/400
 Accept: application/json
 
-### Call delay endpoint with delay of 400ms to return not found
+### Call delay endpoint with delay of 404 to return not found
 GET http://localhost:8082/reactive/delay/404
+Accept: application/json
+
+### Call delay endpoint with delay of 503 to return service unavailable
+GET http://localhost:8082/reactive/delay/503
 Accept: application/json

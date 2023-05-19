@@ -1,7 +1,8 @@
 package com.example.legacybackend
 
 import mu.KotlinLogging
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,6 +29,9 @@ class LegacyController(val legacyService: LegacyService) {
         when (delay.delayMs) {
             400L -> ResponseEntity.badRequest().build()
             404L -> ResponseEntity.notFound().build()
+            500L -> ResponseEntity.internalServerError().build()
+            502L -> ResponseEntity.status(HttpStatus.BAD_GATEWAY).build()
+            503L -> ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build()
             else -> {
                 log.info { ">>>>> Delaying for ${delay.delayMs} ms" }
                 Thread.sleep(delay.delayMs)

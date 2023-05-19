@@ -12,12 +12,19 @@ class LegacyClientService(val legacyClient: LegacyClient, val legacyCircuitBreak
 
     fun getLegacy(id: Long): Mono<Legacy?> = legacyClient.getLegacyById(id)
 
-    fun getDelay(delayMs: Long): Mono<Delay> {
+    fun getDelayCircuitBreaker(delayMs: Long): Mono<Delay> {
         return legacyCircuitBreaker.run(
             legacyClient.getDelay(Delay(delayMs)).onErrorResume(Exception::class.java) {
                 log.error(it) { "LegacyClientService.getDelay: Error occurred while calling delay service: ${it.message}" }
                 Mono.error(it)
             },
         )
+    }
+
+    fun getDelay(delayMs: Long): Mono<Delay> {
+        return legacyClient.getDelay(Delay(delayMs)).onErrorResume(Exception::class.java) {
+            log.error(it) { "LegacyClientService.getDelay: Error occurred while calling delay service: ${it.message}" }
+            Mono.error(it)
+        }
     }
 }
