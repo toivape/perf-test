@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.spring") version "1.7.22"
-    kotlin("plugin.jpa") version "1.7.22"
+    kotlin("jvm") version "1.8.0"
+    kotlin("plugin.spring") version "1.8.0"
+    kotlin("plugin.jpa") version "1.8.0"
 }
 
 group = "com.example"
@@ -27,10 +27,20 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
+// K2 compiler will fail if classes are not open
+allOpen {
+    annotation("org.springframework.context.annotation.Configuration")
+    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
+    annotation("org.springframework.stereotype.Service")
+    annotation("org.springframework.web.bind.annotation.RestController")
+    annotation("org.springframework.stereotype.Controller")
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
+        kotlinOptions.useK2 = true
     }
 }
 

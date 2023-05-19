@@ -1,18 +1,18 @@
 package com.example.reactiveclient
 
 import mu.KotlinLogging
-import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.core.publisher.Mono
+import reactor.util.retry.Retry
+import java.time.Duration
 
 private val log = KotlinLogging.logger {}
 
 @Service
-class LegacyClient(private val legacyWebClient: WebClient, private val reactiveCircuitBreakerFactory: ReactiveResilience4JCircuitBreakerFactory) {
+class LegacyClient(private val legacyWebClient: WebClient) {
 
     fun getLegacyById(id: Long) =
         legacyWebClient.get()
@@ -33,11 +33,17 @@ class LegacyClient(private val legacyWebClient: WebClient, private val reactiveC
                 log.error { "Request $delay failed with 4XX error code: ${resp.statusCode()}" }
                 Mono.error(BadRequestException("Request $delay failed with error: ${resp.statusCode()}"))
             }
+            .onStatus({ it.is5xxServerError }) { resp ->
+                log.error { "Request $delay failed with 5XX error code: ${resp.statusCode()}" }
+                Mono.error(RetryException("Request $delay failed with service error: ${resp.statusCode()}"))
+            }
             .onStatus({ it.isError }) { resp ->
                 log.error { "There was http error. Request $delay failed with error code: ${resp.statusCode()}" }
                 Mono.error(IntegrationException("Request $delay failed with error: ${resp.statusCode()}"))
             }
             .bodyToMono(Delay::class.java)
+            .retryWhen(Retry.backoff(3, Duration.ofSeconds(5)).filter(RetryException::class.java::isInstance))
+
         // .timeout(java.time.Duration.ofSeconds(7)) // This timeout value comes from the Mono publisher class. Nothing to do with http.
     }
 }
@@ -52,3 +58,5 @@ class BadRequestException(msg: String) : Exception(msg)
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class NotFoundException(msg: String) : Exception(msg)
+
+class RetryException(msg: String) : Exception(msg)
