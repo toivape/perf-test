@@ -1,4 +1,4 @@
-package com.example.legacybackend
+package com.example.legacybackend.person
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

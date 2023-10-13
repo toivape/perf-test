@@ -1,4 +1,4 @@
-package com.example.legacybackend
+package com.example.legacybackend.person
 
 import org.springframework.data.repository.CrudRepository
 

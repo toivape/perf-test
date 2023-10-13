@@ -1,4 +1,4 @@
-package com.example.legacybackend
+package com.example.legacybackend.person
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping

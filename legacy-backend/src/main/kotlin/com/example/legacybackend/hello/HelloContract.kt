@@ -1,11 +1,13 @@
-package com.example.legacybackend
+package com.example.legacybackend.hello
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 
+@Tag(name = "Hello Controller", description = "Show that I can say hello.")
 interface HelloContract {
 
     @Operation(
