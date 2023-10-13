@@ -11,7 +11,6 @@ class LegacyClientService(val legacyFeignClient: LegacyFeignClient) {
 
     fun getLegacy(id: Long): Legacy? = legacyFeignClient.getLegacyById(id)
 
-    // TODO Retry on timeout
     @CircuitBreaker(name = "legacyBackend", fallbackMethod = "getDelayFallback")
     fun getDelay(delayMs: Long): Delay = legacyFeignClient.getDelay(Delay(delayMs))
 

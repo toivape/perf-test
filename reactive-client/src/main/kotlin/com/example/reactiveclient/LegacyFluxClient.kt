@@ -43,8 +43,6 @@ class LegacyClient(private val legacyWebClient: WebClient) {
             }
             .bodyToMono(Delay::class.java)
             .retryWhen(Retry.backoff(3, Duration.ofSeconds(5)).filter(RetryException::class.java::isInstance))
-
-        // .timeout(java.time.Duration.ofSeconds(7)) // This timeout value comes from the Mono publisher class. Nothing to do with http.
     }
 }
 

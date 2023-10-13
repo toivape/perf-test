@@ -1,16 +1,19 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.0.6"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.8.0"
-    kotlin("plugin.spring") version "1.8.0"
-    kotlin("plugin.jpa") version "1.8.0"
+    id("org.springframework.boot") version "3.1.4"
+    id("io.spring.dependency-management") version "1.1.3"
+    kotlin("jvm") version "1.8.22"
+    kotlin("plugin.spring") version "1.8.22"
+    kotlin("plugin.jpa") version "1.8.22"
 }
 
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
     mavenCentral()
@@ -22,25 +25,20 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     runtimeOnly("ch.qos.logback:logback-classic:1.4.7")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-// K2 compiler will fail if classes are not open
-allOpen {
-    annotation("org.springframework.context.annotation.Configuration")
-    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
-    annotation("org.springframework.stereotype.Service")
-    annotation("org.springframework.web.bind.annotation.RestController")
-    annotation("org.springframework.stereotype.Controller")
-}
-
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs += "-Xjsr305=strict"
         jvmTarget = "17"
-        kotlinOptions.useK2 = true
     }
 }
 

@@ -8,9 +8,13 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.LocalDate
 
+/**
+ * Person entity.
+ * Hibernate creates db table based on this class.
+ */
 @Entity
-@Table(name = "legacy")
-class Legacy(
+@Table(name = "person")
+class Person(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +26,12 @@ class Legacy(
     @Column(name = "dob", nullable = false)
     var dateOfBirth: LocalDate? = null,
 
-)
+) {
+    fun toPersonData(): PersonData {
+        return PersonData(
+            id = id!!,
+            name = name!!,
+            dateOfBirth = dateOfBirth!!.toString(),
+        )
+    }
+}

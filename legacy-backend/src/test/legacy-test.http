@@ -1,0 +1,70 @@
+### Response is delayed by 1000ms
+POST http://localhost:8080/api/delay
+Content-Type: application/json
+
+{ "delayMs": 1000 }
+
+> {%
+    client.test("Post delay returns HTTP 200", function() {
+        client.assert(response.status === 200, "Response status is not HTTP 200");
+    });
+
+    client.test("Response content-type is json", function() {
+        const mimeType = response.contentType.mimeType;
+        client.assert(mimeType === "application/json", "Expected 'application/json' but received '" + mimeType + "'");
+    });
+
+    client.test("Delay time is echoed", function() {
+        client.assert(response.body.delayMs === 1000,"DelayMs is not 1000");
+    });
+%}
+
+### Get all persons
+GET http://localhost:8080/api/persons
+
+
+### Get data by id. Response is delayed by 5000ms.
+GET http://localhost:8080/api/persons/1
+
+> {%
+    client.test("Get data by id returns HTTP 200", function() {
+        client.assert(response.status === 200, "Expected response status HTTP 200 but received '" + response.status + "'");
+    });
+
+    client.test("Response content-type is json", function() {
+        const mimeType = response.contentType.mimeType;
+        client.assert(mimeType === "application/json", "Expected 'application/json' but received '" + mimeType + "'");
+    });
+
+    client.test("Data is returned", function() {
+        client.assert(response.body.id === 1,"Id is not 1");
+        client.assert(response.body.name === "John","Name is not John");
+    });
+%}
+
+### Get hello
+GET http://localhost:8080/api/hello
+
+> {%
+    client.test("Hello returns HTTP 200", function() {
+        client.assert(response.status === 200, "Expected response status HTTP 200 but received '" + response.status + "'");
+    });
+
+    client.test("Hello response content-type is json", function() {
+        const mimeType = response.contentType.mimeType;
+        client.assert(mimeType === "application/json", "Expected 'application/json' but received '" + mimeType + "'");
+    });
+
+    client.test("Data is returned", function() {
+        client.assert(response.body.hello === 'World!', "Hello is not World!");
+    });
+%}
+
+
+### Get swagger documentation
+GET http://localhost:8080/v3/api-docs
+
+
+### List api mappings
+GET http://localhost:8080/actuator/mappings
+

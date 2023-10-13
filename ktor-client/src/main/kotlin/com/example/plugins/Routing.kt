@@ -1,6 +1,6 @@
 package com.example.plugins
 
-import io.ktor.client.*
+import io.ktor.client.* // ktlint-disable no-wildcard-imports
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.logging.*
@@ -13,9 +13,6 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     val client = HttpClient(CIO) {
-        /*install(Logging) {
-            level = LogLevel.NONE
-        }*/
         headers {
             append(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             append(HttpHeaders.Accept, ContentType.Application.Json.toString())
