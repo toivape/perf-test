@@ -1,0 +1,18 @@
+### Get data by id
+GET http://localhost:8082/reactive/data/1
+
+> {%
+    client.test("Get data by id returns HTTP 200", function() {
+        client.assert(response.status === 200, "Expected response status HTTP 200 but received '" + response.status + "'");
+    });
+
+    client.test("Response content-type is json", function() {
+        const mimeType = response.contentType.mimeType;
+        client.assert(mimeType === "application/json", "Expected 'application/json' but received '" + mimeType + "'");
+    });
+
+    client.test("Data is returned", function() {
+        client.assert(response.body.id === 1,"Id is not 1");
+        client.assert(response.body.name === "John","Name is not John");
+    });
+%}

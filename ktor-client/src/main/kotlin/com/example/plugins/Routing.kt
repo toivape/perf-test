@@ -31,7 +31,7 @@ fun Application.configureRouting() {
 
         get("/ktor/data/{id}") {
             val id = call.parameters["id"]?.toLongOrNull() ?: 1L
-            val response: HttpResponse = client.get("http://localhost:8080/api/legacy/$id")
+            val response: HttpResponse = client.get("http://localhost:8080/api/persons/$id")
             call.respond(HttpStatusCode.OK, response.bodyAsText())
         }
     }

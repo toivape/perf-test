@@ -11,11 +11,5 @@ import reactor.core.publisher.Mono
 class LegacyClientController(val legacyClientService: LegacyClientService) {
 
     @GetMapping("/data/{id}")
-    fun getLegacyByName(@PathVariable id: Long): Mono<Legacy?> = legacyClientService.getLegacy(id)
-
-    @GetMapping("/delay/{delayMs}/cb")
-    fun getDelayCircuiteBreaker(@PathVariable delayMs: Long): Mono<Delay> = legacyClientService.getDelayCircuitBreaker(delayMs)
-
-    @GetMapping("/delay/{delayMs}")
-    fun getDelay(@PathVariable delayMs: Long): Mono<Delay> = legacyClientService.getDelay(delayMs)
+    fun getLegacyByName(@PathVariable id: Long): Mono<Person?> = legacyClientService.getLegacy(id)
 }
